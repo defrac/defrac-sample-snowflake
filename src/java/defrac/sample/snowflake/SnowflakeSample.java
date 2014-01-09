@@ -1,11 +1,11 @@
 package defrac.sample.snowflake;
 
-import defrac.app.App;
+import defrac.app.GenericApp;
 import defrac.app.Bootstrap;
 import defrac.concurrent.Dispatchers;
 import defrac.concurrent.Future;
 import defrac.display.*;
-import defrac.event.EnterFrameEvent;
+import defrac.event.Event;
 import defrac.event.Events;
 import defrac.geom.Rectangle;
 import defrac.lang.Procedure;
@@ -14,7 +14,7 @@ import defrac.resource.TextureDataResource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public final class SnowflakeSample extends App {
+public final class SnowflakeSample extends GenericApp {
   // Number of snowflakes on screen
   private static final int NUM_SNOWFLAKES = 1250;
 
@@ -28,7 +28,7 @@ public final class SnowflakeSample extends App {
   @Override
   protected void onCreate() {
     // Change the background color to white
-    stage().backgroundColor(0xffffffff);
+    backgroundColor(0xffffffff);
 
     // Access a resource from the "resources" directory.
     //
@@ -82,7 +82,7 @@ public final class SnowflakeSample extends App {
     container.centerRegistrationPoint();
 
     // Add the container to the stage
-    stage().addChild(container);
+    addChild(container);
 
     // Now create the actual snowflakes...
     final Snowflake[] snowflakes = new Snowflake[NUM_SNOWFLAKES];
@@ -102,9 +102,9 @@ public final class SnowflakeSample extends App {
     centerEverything();
 
     // Update all the snowflakes on every frame
-    Events.onEnterFrame.attach(new Procedure<EnterFrameEvent>() {
+    Events.onEnterFrame.attach(new Procedure<Event>() {
       @Override
-      public void apply(final EnterFrameEvent enterFrameEvent) {
+      public void apply(final Event event) {
         for(final Snowflake snowflake : snowflakes) {
           snowflake.update();
         }
@@ -112,9 +112,9 @@ public final class SnowflakeSample extends App {
     });
 
     // On resize, center everything
-    stage().onResize.attach(new Procedure<Stage>() {
+    stage().onResize.attach(new Procedure<Event>() {
       @Override
-      public void apply(final Stage value) {
+      public void apply(final Event event) {
         centerEverything();
       }
     });
