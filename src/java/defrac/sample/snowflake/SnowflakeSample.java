@@ -1,13 +1,11 @@
 package defrac.sample.snowflake;
 
-import defrac.app.GenericApp;
 import defrac.app.Bootstrap;
-import defrac.concurrent.Dispatchers;
+import defrac.app.GenericApp;
 import defrac.concurrent.Future;
 import defrac.display.*;
 import defrac.event.Event;
 import defrac.event.Events;
-import defrac.geom.Rectangle;
 import defrac.lang.Procedure;
 import defrac.resource.TextureDataResource;
 
@@ -68,6 +66,7 @@ public final class SnowflakeSample extends GenericApp {
     // We can give a hint about how many display objects
     // will be contained in this layer to save some memory
     final Layer snowflakeLayer = new Layer(NUM_SNOWFLAKES);
+    snowflakeLayer.blendMode(BlendMode.SCREEN);
 
     // The setup for the stage is quite simple,
     // create a container (so we can easily reposition everything)
@@ -93,8 +92,7 @@ public final class SnowflakeSample extends GenericApp {
       snowflake.reset();
       snowflakeLayer.addChild(
           snowflake
-              .moveToRandomPosition()
-              .blendMode(BlendMode.SCREEN));
+              .moveToRandomPosition());
       snowflakes[i] = snowflake;
     }
 
