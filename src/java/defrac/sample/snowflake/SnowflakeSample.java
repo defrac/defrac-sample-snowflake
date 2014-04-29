@@ -4,7 +4,8 @@ import defrac.app.Bootstrap;
 import defrac.app.GenericApp;
 import defrac.concurrent.Future;
 import defrac.display.*;
-import defrac.event.Event;
+import defrac.event.EnterFrameEvent;
+import defrac.event.EventListener;
 import defrac.event.Events;
 import defrac.lang.Procedure;
 import defrac.resource.TextureDataResource;
@@ -100,19 +101,19 @@ public final class SnowflakeSample extends GenericApp {
     centerEverything();
 
     // Update all the snowflakes on every frame
-    Events.onEnterFrame.attach(new Procedure<Event>() {
+    Events.onEnterFrame.add(new EventListener<EnterFrameEvent>() {
       @Override
-      public void apply(final Event event) {
-        for(final Snowflake snowflake : snowflakes) {
+      public void onEvent(final EnterFrameEvent event) {
+        for (final Snowflake snowflake : snowflakes) {
           snowflake.update();
         }
       }
     });
 
     // On resize, center everything
-    stage().onResize.attach(new Procedure<Event>() {
+    stage().addListener(new Stage.SimpleListener() {
       @Override
-      public void apply(final Event event) {
+      public void onStageResize(@Nonnull Stage stage, float width, float height) {
         centerEverything();
       }
     });
