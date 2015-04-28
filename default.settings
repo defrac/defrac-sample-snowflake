@@ -1,22 +1,25 @@
 {
   "name": "Snowflake Sample",
-  "package": "com.defrac.sample",
-  "identifier": "snowflake",
-  "main": "defrac.sample.snowflake.SnowflakeSample",
+  "package": "com.defrac.sample.snowflake",
   "version": "1.0",
+
+  "main": "defrac.sample.snowflake.SnowflakeSample",
+
   "targets": [
     "android",
     "web",
     "jvm"
   ],
+
   "debug": "true",
+
   "web": {
-    "js": "snowflake_sample.js",
     "debug": "false",
-    "strictMode": "false"
+    "optimize": "true"
   },
+
   "jvm": {
     "width": "1024",
     "height": "590"
-  }
+  },
 }
