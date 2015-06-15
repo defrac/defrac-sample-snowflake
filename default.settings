@@ -3,7 +3,7 @@
   "package": "com.defrac.sample.snowflake",
   "version": "1.0",
 
-  "main": "defrac.sample.snowflake.SnowflakeSample",
+  "main": "defrac.sample.snowflake.Main",
 
   "targets": [
     "android",
@@ -11,15 +11,10 @@
     "jvm"
   ],
 
-  "debug": "true",
+  "debug": true,
 
   "web": {
-    "debug": "false",
-    "optimize": "true"
-  },
-
-  "jvm": {
-    "width": "1024",
-    "height": "590"
-  },
+    "debug": false,
+    "optimize": true
+  }
 }
