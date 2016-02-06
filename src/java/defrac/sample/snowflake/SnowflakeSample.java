@@ -2,18 +2,14 @@ package defrac.sample.snowflake;
 
 import defrac.concurrent.Future;
 import defrac.display.*;
-import defrac.display.event.raw.EnterFrameEvent;
-import defrac.display.event.raw.ResizeEvent;
-import defrac.event.EventListener;
-import defrac.lang.Procedure;
 import defrac.resource.TextureDataResource;
-import defrac.ui.DisplayList;
 import defrac.ui.*;
+import defrac.ui.DisplayList;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public final class SnowflakeSample extends Screen {
+public final class SnowflakeSample extends ContentScreen {
   // Number of snowflakes on screen
   private static final int NUM_SNOWFLAKES = 1250;
 
@@ -31,43 +27,35 @@ public final class SnowflakeSample extends Screen {
     // Change the background color to white
     displayList.backgroundColor(0xffffffff);
 
-    displayList.onStageReady(new Procedure<Stage>() {
-      @Override
-      public void apply(@Nonnull final Stage stage) {
-        stage.backgroundColor(0xffffffff);
+    displayList.onStageReady(stage -> {
+      stage.backgroundColor(0xffffffff);
 
-        // Access a resource from the "resources" directory.
-        //
-        // We want to load it as a TextureData, so we choose the TextureDataResource.
-        // Other resource types can be loaded with InputStreamResource or BinaryResource.
-        //
-        // Note: If we enable WebP conversion (on by default) a runtime choice will be made
-        //       to load the WebP version of this image
-        final TextureDataResource textureDataResource =
-            TextureDataResource.from("textures.png");
+      // Access a resource from the "resources" directory.
+      //
+      // We want to load it as a TextureData, so we choose the TextureDataResource.
+      // Other resource types can be loaded with InputStreamResource or BinaryResource.
+      //
+      // Note: If we enable WebP conversion (on by default) a runtime choice will be made
+      //       to load the WebP version of this image
+      final TextureDataResource textureDataResource =
+          TextureDataResource.from("textures.png");
 
-        // Start loading the resource, this will create a Future of TextureData
-        // We could also attach listeners to textureDataResource (like textureDataResource.onComplete)
-        // but for the sake of this example, we take a shortcut and act on the Future
-        final Future<TextureData> dataFuture = textureDataResource.load();
+      // Start loading the resource, this will create a Future of TextureData
+      // We could also attach listeners to textureDataResource (like textureDataResource.onComplete)
+      // but for the sake of this example, we take a shortcut and act on the Future
+      final Future<TextureData> dataFuture = textureDataResource.load();
 
-        // Map the Future of TextureData to a Future of TextureAtlas
-        // This computation will take place only if the computation succeeds
-        final Future<TextureAtlas> textureAtlasFuture =
-            dataFuture.map(TextureAtlas.DATA_TO_ATLAS);
+      // Map the Future of TextureData to a Future of TextureAtlas
+      // This computation will take place only if the computation succeeds
+      final Future<TextureAtlas> textureAtlasFuture =
+          dataFuture.map(TextureAtlas.DATA_TO_ATLAS);
 
-        // The TextureAtlas has been loaded, continue with it.
-        //
-        // Note: Futures are computations that are either complete, or incomplete
-        //       If a computation already completed, the listener will be called
-        //       immediately.
-        textureAtlasFuture.onSuccess(new Procedure<TextureAtlas>() {
-          @Override
-          public void apply(final TextureAtlas textureAtlas) {
-            init(stage, textureAtlas);
-          }
-        });
-      }
+      // The TextureAtlas has been loaded, continue with it.
+      //
+      // Note: Futures are computations that are either complete, or incomplete
+      //       If a computation already completed, the listener will be called
+      //       immediately.
+      textureAtlasFuture.onSuccess(textureAtlas -> init(stage, textureAtlas));
     });
 
     final LinearLayout layout =
@@ -141,22 +129,14 @@ public final class SnowflakeSample extends Screen {
     centerEverything(stage);
 
     // Update all the snowflakes on every frame
-    stage.globalEvents().onEnterFrame.add(new EventListener<EnterFrameEvent>() {
-      @Override
-      public void onEvent(final EnterFrameEvent event) {
-        for (final Snowflake snowflake : snowflakes) {
-          snowflake.update();
-        }
+    stage.globalEvents().onEnterFrame.add(event -> {
+      for (final Snowflake snowflake : snowflakes) {
+        snowflake.update();
       }
     });
 
     // On resize, center everything
-    stage.globalEvents().onResize.add(new EventListener<ResizeEvent>() {
-      @Override
-      public void onEvent(ResizeEvent event) {
-        centerEverything(stage);
-      }
-    });
+    stage.globalEvents().onResize.add(event -> centerEverything(stage));
   }
 
   private void centerEverything(@Nonnull final Stage stage) {
